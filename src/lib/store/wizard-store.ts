@@ -117,8 +117,8 @@ export const useWizardStore = create<WizardState>()(
             })
         }),
         {
-            name: 'incident-wizard-storage',
-            version: 3, // Bumped to 3 to handle ActionItem schema change
+            name: 'incident-wizard-storage-v3', // Changed name to force fresh state and avoid migration error
+            // version property removed to rely on default behavior
         }
     )
 )
