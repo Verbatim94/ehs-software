@@ -38,17 +38,17 @@ export default function HomePage() {
                 </div>
 
                 {/* 3. HERO / WELCOME CARD */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
                     {/* Left: User Profile / Welcome (Span 2) */}
                     <Card className="md:col-span-2 border-none shadow-xl bg-white/95 backdrop-blur overflow-hidden">
-                        <CardContent className="p-6 flex items-center gap-6">
-                            <div className="h-20 w-20 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-md">
-                                <User className="h-10 w-10 text-white" />
+                        <CardContent className="p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6">
+                            <div className="h-16 w-16 md:h-20 md:w-20 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-md">
+                                <User className="h-8 w-8 md:h-10 md:w-10 text-white" />
                             </div>
-                            <div className="flex-1">
-                                <h2 className="text-xl font-bold text-slate-800">Matteo Nieddu</h2>
-                                <p className="text-sm text-slate-500 mb-4">EHS Manager &bull; Site A</p>
-                                <div className="flex gap-3">
+                            <div className="flex-1 w-full">
+                                <h2 className="text-lg md:text-xl font-bold text-slate-800">Matteo Nieddu</h2>
+                                <p className="text-xs md:text-sm text-slate-500 mb-3 md:mb-4">EHS Manager &bull; Site A</p>
+                                <div className="flex flex-wrap gap-2 md:gap-3">
                                     <Link href="/profile">
                                         <Button size="sm" variant="outline" className="text-xs">Profilo</Button>
                                     </Link>

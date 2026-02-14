@@ -34,16 +34,16 @@ export default function ReportsPage() {
             <div className="absolute top-0 w-full h-[300px] bg-gradient-to-r from-blue-700 to-indigo-600 rounded-b-[2rem] shadow-lg z-0" />
 
             {/* MAIN CONTENT CONTAINER */}
-            <div className="relative z-10 container mx-auto px-4 pt-8 max-w-6xl">
+            <div className="relative z-10 container mx-auto px-4 pt-6 md:pt-8 max-w-6xl">
 
                 {/* 2. PAGE HEADER */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-white mb-8 gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-white mb-6 md:mb-8 gap-3 md:gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight uppercase">Le Mie Segnalazioni</h1>
-                        <p className="text-blue-100 text-sm opacity-90">Gestisci e monitora lo stato delle tue segnalazioni.</p>
+                        <h1 className="text-xl md:text-2xl font-bold tracking-tight uppercase">Le Mie Segnalazioni</h1>
+                        <p className="text-blue-100 text-xs md:text-sm opacity-90">Gestisci e monitora lo stato delle tue segnalazioni.</p>
                     </div>
-                    <Link href="/report/new">
-                        <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 border-none shadow-md font-bold">
+                    <Link href="/report/new" className="w-full md:w-auto">
+                        <Button size="lg" className="w-full md:w-auto bg-white text-blue-600 hover:bg-blue-50 border-none shadow-md font-bold">
                             <Plus className="h-5 w-5 mr-2" />
                             Nuova Segnalazione
                         </Button>
