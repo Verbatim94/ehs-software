@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useWizardStore } from "@/lib/store/wizard-store"
@@ -25,9 +24,9 @@ export default function NewReportPage() {
             case 3:
                 return <Step3Photos />
             case 4:
-                return <div className="p-8 text-center text-muted-foreground">Step 4: Analisi (In Construction)</div>
+                return <Step4Analysis />
             case 5:
-                return <div className="p-8 text-center text-muted-foreground">Step 5: Riepilogo (In Construction)</div>
+                return <Step5Summary />
             default:
                 return <Step1Context />
         }

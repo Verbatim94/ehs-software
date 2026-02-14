@@ -1,0 +1,144 @@
+--- FRONT ---
+<g data-zone="head_neck" data-label="Testa / Collo" className={isSel("head_neck")}>
+  <title>Testa / Collo</title>
+  <ellipse cx="707" cy="331" rx="152" ry="203" />
+  <ellipse cx="707" cy="300" rx="97" ry="120" />
+  <path d="M660 440Q707 460 754 440L760 520Q707 540 654 520Z" />
+</g>
+<g data-zone="chest_l" data-label="Torace sinistro" className={isSel("chest_l")}>
+  <title>Torace sinistro</title>
+  <path d="M580 470L707 470L707 550Q650 570 580 520Z" />
+  <path d="M580 515Q630 570 707 560L707 650L610 660Q570 600 580 515Z" />
+  <path d="M550 560L580 530L610 660L540 650Z" />
+</g>
+<g data-zone="chest_r" data-label="Torace destro" className={isSel("chest_r")}>
+  <title>Torace destro</title>
+  <path d="M834 470L707 470L707 550Q764 570 834 520Z" />
+  <path d="M834 515Q784 570 707 560L707 650L904 660Q944 600 834 515Z" />
+  <path d="M864 560L834 530L804 660L874 650Z" />
+</g>
+<g data-zone="abdomen" data-label="Addome" className={isSel("abdomen")}>
+  <title>Addome</title>
+  <path d="M610 660L707 650L707 760L620 770Q600 710 610 660Z" />
+  <path d="M804 660L707 650L707 760L794 770Q814 710 804 660Z" />
+  <path d="M620 765L707 755L707 850L630 870Q615 820 620 765Z" />
+  <path d="M794 765L707 755L707 850L784 870Q799 820 794 765Z" />
+</g>
+<g data-zone="hip_l" data-label="Anca sinistra" className={isSel("hip_l")}>
+  <title>Anca sinistra</title>
+  <path d="M630 865L707 845L707 920L650 940Q625 900 630 865Z" />
+  <path d="M550 670L610 685L630 870L650 940L560 920Q530 800 550 670Z" />
+</g>
+<g data-zone="hip_r" data-label="Anca destra" className={isSel("hip_r")}>
+  <title>Anca destra</title>
+  <path d="M784 865L707 845L707 920L764 940Q789 900 784 865Z" />
+  <path d="M864 670L804 685L784 870L764 940L854 920Q884 800 864 670Z" />
+</g>
+<g data-zone="groin" data-label="Inguine" className={isSel("groin")}>
+  <title>Inguine</title>
+  <path d="M660 940L754 940L707 1010Z" />
+</g>
+<g data-zone="arm_upper_l" data-label="Braccio sinistro (alto)" className={isSel("arm_upper_l")}>
+  <title>Braccio sinistro (alto)</title>
+  <path d="M430 450Q500 420 560 450L580 580Q500 600 410 580Z" />
+  <path d="M410 570L580 570L570 790L420 790Z" />
+  <path d="M420 780L570 780L565 850L425 850Z" />
+</g>
+<g data-zone="arm_lower_l" data-label="Avambraccio + Mano sinistra" className={isSel("arm_lower_l")}>
+  <title>Avambraccio + Mano sinistra</title>
+  <path d="M425 840L565 840L555 990L415 990Z" />
+  <path d="M415 980L555 980L545 1130L405 1130Z" />
+  <path d="M405 1120L545 1120L540 1170L400 1170Z" />
+  <path d="M390 1170L550 1170Q560 1250 540 1320L400 1320Q380 1250 390 1170Z" />
+  <path d="M400 1310L540 1310Q550 1420 470 1440Q390 1420 400 1310Z" />
+</g>
+<g data-zone="arm_upper_r" data-label="Braccio destro (alto)" className={isSel("arm_upper_r")}>
+  <title>Braccio destro (alto)</title>
+  <path d="M984 450Q914 420 854 450L834 580Q914 600 1004 580Z" />
+  <path d="M1004 570L834 570L844 790L994 790Z" />
+  <path d="M994 780L844 780L849 850L989 850Z" />
+</g>
+<g data-zone="arm_lower_r" data-label="Avambraccio + Mano destra" className={isSel("arm_lower_r")}>
+  <title>Avambraccio + Mano destra</title>
+  <path d="M989 840L849 840L859 990L999 990Z" />
+  <path d="M999 980L859 980L869 1130L1009 1130Z" />
+  <path d="M1009 1120L869 1120L874 1170L1014 1170Z" />
+  <path d="M1024 1170L864 1170Q854 1250 874 1320L1014 1320Q1034 1250 1024 1170Z" />
+  <path d="M1014 1310L874 1310Q864 1420 944 1440Q1024 1420 1014 1310Z" />
+</g>
+<g data-zone="leg_upper_l" data-label="Coscia sinistra" className={isSel("leg_upper_l")}>
+  <title>Coscia sinistra</title>
+  <path d="M560 920L640 940L620 1150L560 1130Q540 1020 560 920Z" />
+  <path d="M650 945L707 930L690 1145L630 1150L650 945Z" />
+  <path d="M580 1140L670 1140L665 1240L585 1240Z" />
+</g>
+<g data-zone="leg_lower_l" data-label="Gamba + Piede sinistro" className={isSel("leg_lower_l")}>
+  <title>Gamba + Piede sinistro</title>
+  <path d="M600 1240L665 1240L650 1450L610 1450Z" />
+  <path d="M580 1240L600 1240L610 1440L570 1420Q550 1300 580 1240Z" />
+  <path d="M590 1440L660 1440L655 1500L595 1500Z" />
+  <path d="M580 1500L660 1500L670 1550L570 1550Z" />
+  <path d="M575 1550L665 1550Q675 1590 620 1600Q565 1590 575 1550Z" />
+</g>
+<g data-zone="leg_upper_r" data-label="Coscia destra" className={isSel("leg_upper_r")}>
+  <title>Coscia destra</title>
+  <path d="M854 920L774 940L794 1150L854 1130Q874 1020 854 920Z" />
+  <path d="M764 945L707 930L724 1145L784 1150L764 945Z" />
+  <path d="M744 1140L834 1140L829 1240L749 1240Z" />
+</g>
+<g data-zone="leg_lower_r" data-label="Gamba + Piede destro" className={isSel("leg_lower_r")}>
+  <title>Gamba + Piede destro</title>
+  <path d="M749 1240L814 1240L799 1450L759 1450Z" />
+  <path d="M834 1240L814 1240L804 1440L844 1420Q864 1300 834 1240Z" />
+  <path d="M754 1440L824 1440L819 1500L759 1500Z" />
+  <path d="M754 1500L834 1500L824 1550L744 1550Z" />
+  <path d="M749 1550L839 1550Q849 1590 794 1600Q739 1590 749 1550Z" />
+</g>
+--- BACK ---
+<g data-zone="back_head_neck" data-label="Testa / Collo (retro)" className={isSel("back_head_neck")}>
+  <title>Testa / Collo (retro)</title>
+  <ellipse cx="707" cy="331" rx="152" ry="203" />
+  <path d="M660 440L754 440L760 550L654 550Z" />
+</g>
+<g data-zone="upper_back" data-label="Schiena alta" className={isSel("upper_back")}>
+  <title>Schiena alta</title>
+  <path d="M570 480L707 480L707 700L600 730L550 550Z" />
+  <path d="M844 480L707 480L707 700L814 730L864 550Z" />
+  <path d="M530 520L600 550L590 680L520 650Z" />
+  <path d="M884 520L814 550L824 680L894 650Z" />
+</g>
+<g data-zone="lower_back" data-label="Schiena bassa" className={isSel("lower_back")}>
+  <title>Schiena bassa</title>
+  <path d="M600 720L707 690L707 920L650 940Q620 900 600 720Z" />
+  <path d="M814 720L707 690L707 920L764 940Q794 900 814 720Z" />
+</g>
+<g data-zone="glute_l" data-label="Gluteo sinistro" className={isSel("glute_l")}>
+  <title>Gluteo sinistro</title>
+  <path d="M580 930L707 890L707 1050L600 1080Q560 1000 580 930Z" />
+</g>
+<g data-zone="glute_r" data-label="Gluteo destro" className={isSel("glute_r")}>
+  <title>Gluteo destro</title>
+  <path d="M834 930L707 890L707 1050L814 1080Q854 1000 834 930Z" />
+</g>
+<g data-zone="back_arm_l" data-label="Braccio sinistro (retro)" className={isSel("back_arm_l")}>
+  <title>Braccio sinistro (retro)</title>
+  <path d="M410 570L580 570L570 790L420 790Z" />
+  <path d="M425 840L565 840L555 1130L415 1130Z" />
+  <path d="M400 1170L550 1170L540 1450L410 1450Z" />
+</g>
+<g data-zone="back_arm_r" data-label="Braccio destro (retro)" className={isSel("back_arm_r")}>
+  <title>Braccio destro (retro)</title>
+  <path d="M1004 570L834 570L844 790L994 790Z" />
+  <path d="M989 840L849 840L859 1130L999 1130Z" />
+  <path d="M1014 1170L864 1170L874 1450L1004 1450Z" />
+</g>
+<g data-zone="back_leg_l" data-label="Gamba sinistra (retro)" className={isSel("back_leg_l")}>
+  <title>Gamba sinistra (retro)</title>
+  <path d="M580 1550L630 1550L625 1600L585 1600Z" />
+  <path d="M560 1600L650 1600L640 1650L570 1650Z" />
+</g>
+<g data-zone="back_leg_r" data-label="Gamba destra (retro)" className={isSel("back_leg_r")}>
+  <title>Gamba destra (retro)</title>
+  <path d="M834 1550L784 1550L789 1600L829 1600Z" />
+  <path d="M854 1600L764 1600L774 1650L844 1650Z" />
+</g>

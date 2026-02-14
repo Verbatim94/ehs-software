@@ -1,239 +1,142 @@
-
 "use client"
 
-import { BodyPart } from "@/lib/store/wizard-store"
-import { cn } from "@/lib/utils"
+import React from "react"
 
-interface BodyBackProps {
-    bodyParts: BodyPart[]
-    togglePart: (id: string, label: string) => void
-    view: 'back'
+interface OffsetMap {
+    [key: string]: { x: number, y: number, sx: number, sy: number, r: number }
 }
 
-export default function BodyBack({ bodyParts, togglePart, view }: BodyBackProps) {
+const DEFAULT_OFFSET = { x: 0, y: 0, sx: 1, sy: 1, r: 0 }
 
-    // MAP: Detailed Zone ID -> Logical Group ID
-    // Maps detailed SVG paths to broader categories
-    const ZONE_GROUPS: Record<string, { id: string, label: string }> = {
-        // Head / Neck
-        back_head: { id: 'back_head', label: 'Testa (retro)' },
-        back_neck: { id: 'back_neck', label: 'Collo (retro)' },
+interface BodyBackProps {
+    selectedIds: Set<string>
+    offsets: OffsetMap
+    calibrationMode: boolean
+    activeZone: string | null
+    onPointerDown: (e: React.PointerEvent, id: string) => void
+}
 
-        // Upper Back (Upper + Scapula)
-        upper_back_l: { id: 'upper_back_l', label: 'Schiena alta sinistra' },
-        scapula_l: { id: 'upper_back_l', label: 'Schiena alta sinistra' },
-        upper_back_r: { id: 'upper_back_r', label: 'Schiena alta destra' },
-        scapula_r: { id: 'upper_back_r', label: 'Schiena alta destra' },
-
-        // Lower Back
-        lower_back_l: { id: 'lower_back_l', label: 'Schiena bassa sinistra' },
-        lower_back_r: { id: 'lower_back_r', label: 'Schiena bassa destra' },
-
-        // Glutes
-        glute_l: { id: 'glute_l', label: 'Gluteo sinistro' },
-        glute_r: { id: 'glute_r', label: 'Gluteo destro' },
-
-        // Arms (Back View) -> Grouping full arm?
-        // Front view has upper/forearm/hand. Let's match front view granularity or simple?
-        // User asked for "thighs, chest..." not explicitly arms.
-        // Let's keep Arm Upper, Forearm, Hand separate to match front view logic.
-        back_upperarm_l: { id: 'back_arm_l', label: 'Braccio sinistro (retro)' },
-        back_upperarm_r: { id: 'back_arm_r', label: 'Braccio destro (retro)' },
-
-        back_forearm_l: { id: 'back_forearm_l', label: 'Avambraccio sinistro (retro)' },
-        back_forearm_r: { id: 'back_forearm_r', label: 'Avambraccio destro (retro)' },
-
-        back_hand_l: { id: 'back_hand_l', label: 'Mano sinistra (retro)' },
-        back_hand_r: { id: 'back_hand_r', label: 'Mano destra (retro)' },
-
-        // Thigh Back
-        thigh_back_l: { id: 'thigh_back_l', label: 'Coscia posteriore sinistra' },
-        thigh_back_r: { id: 'thigh_back_r', label: 'Coscia posteriore destra' },
-
-        // Knee Back
-        knee_back_l: { id: 'knee_back_l', label: 'Ginocchio (retro) sinistro' },
-        knee_back_r: { id: 'knee_back_r', label: 'Ginocchio (retro) destro' },
-
-        // Calf Back
-        calf_back_l: { id: 'leg_back_l', label: 'Polpaccio sinistro' },
-        calf_back_r: { id: 'leg_back_r', label: 'Polpaccio destro' },
-
-        // Ankles / Feet Back
-        back_ankle_l: { id: 'back_foot_l', label: 'Piede sinistro (retro)' },
-        back_foot_l: { id: 'back_foot_l', label: 'Piede sinistro (retro)' },
-        back_ankle_r: { id: 'back_foot_r', label: 'Piede destro (retro)' },
-        back_foot_r: { id: 'back_foot_r', label: 'Piede destro (retro)' },
-    }
-
-    // CONFIGURATION: Calibrated Transforms for Body Parts (Back View)
-    // Applying Global Logic: Scale 0.59, Y -157px, X +/-70px (Arms), X +/-20px (Torso/Legs)
-    const getZoneTransform = (zoneId: string) => {
-        const centerOrigin = { transformOrigin: "512px 682.5px" }
-        const scale = "scale(0.59)"
-        const yOffset = "-157px"
-
-        const torsoAndLegs = [
-            'upper_back', 'scapula', 'lower_back', 'glute',
-            'thigh', 'knee', 'leg', 'calf', 'ankle', 'foot'
-        ]
-        const isTorsoOrLeg = torsoAndLegs.some(part => zoneId.includes(part))
-
-        // 1. CENTER (Head/Neck)
-        if (['back_head', 'back_neck'].includes(zoneId)) {
-            return { transform: `translate(0px, ${yOffset}) ${scale}`, ...centerOrigin }
+export default function BodyBack({ selectedIds, offsets, calibrationMode, activeZone, onPointerDown }: BodyBackProps) {
+    const getProps = (id: string, label: string) => {
+        const off = offsets[id] || { ...DEFAULT_OFFSET }
+        const hasTransform = off.x !== 0 || off.y !== 0 || off.sx !== 1 || off.sy !== 1 || off.r !== 0
+        return {
+            "data-zone": id,
+            "data-label": label,
+            className: `zone-group ${selectedIds.has(id) ? 'is-selected' : ''} ${calibrationMode && activeZone === id ? 'active-zone' : ''}`,
+            style: {
+                transform: hasTransform ? `translate(${off.x}px, ${off.y}px) rotate(${off.r}deg) scale(${off.sx}, ${off.sy})` : undefined,
+                transformOrigin: 'center',
+                transformBox: 'fill-box'
+            } as React.CSSProperties,
+            onPointerDown: (e: React.PointerEvent) => onPointerDown(e, id)
         }
-
-        // 2. LEFT SIDE (SVG Coords Left of Center < 512)
-        // In Back View, this is "Left" of the image.
-        if (zoneId.endsWith('_l')) {
-            // Torso/Legs: Closer to center
-            if (isTorsoOrLeg) {
-                return { transform: `translate(-20px, ${yOffset}) ${scale}`, ...centerOrigin }
-            }
-
-            // Overrides for arms
-            if (['back_forearm_l'].includes(zoneId)) return { transform: "translate(-77px, -175px) scale(0.59)", ...centerOrigin }
-            if (['back_hand_l'].includes(zoneId)) return { transform: "translate(-113px, -200px) scale(0.55)", ...centerOrigin }
-
-            return { transform: `translate(-70px, ${yOffset}) ${scale}`, ...centerOrigin }
-        }
-
-        if (zoneId.endsWith('_r')) {
-            // Torso/Legs: Closer to center
-            if (isTorsoOrLeg) {
-                return { transform: `translate(20px, ${yOffset}) ${scale}`, ...centerOrigin }
-            }
-
-            // Overrides for arms
-            if (['back_forearm_r'].includes(zoneId)) return { transform: "translate(77px, -175px) scale(0.59)", ...centerOrigin }
-            if (['back_hand_r'].includes(zoneId)) return { transform: "translate(113px, -200px) scale(0.55)", ...centerOrigin }
-
-            return { transform: `translate(70px, ${yOffset}) ${scale}`, ...centerOrigin }
-        }
-
-        return {}
-    }
-
-    const handleZoneClick = (e: React.MouseEvent<SVGGElement>) => {
-        const target = (e.target as Element).closest('.zone') as HTMLElement | null
-        if (!target) return
-
-        const detailedZone = target.getAttribute('data-zone')
-
-        if (detailedZone) {
-            // Lookup the Logical Group
-            const group = ZONE_GROUPS[detailedZone]
-            if (group) {
-                togglePart(group.id, group.label)
-            } else {
-                const label = target.getAttribute('data-label') || detailedZone
-                togglePart(detailedZone, label)
-            }
-        }
-    }
-
-    const isSelected = (detailedZone: string) => {
-        const group = ZONE_GROUPS[detailedZone]
-        if (!group) return false
-        return bodyParts.some(p => p.id === `${group.id}_back`)
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            <svg
-                viewBox="0 0 1024 1365"
-                className="w-full h-auto max-h-[500px] select-none border border-slate-800 rounded-lg bg-slate-950"
-                role="img"
-                aria-label="Body chart back selectable zones"
-            >
-                <defs>
-                    <filter id="glow-back" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur stdDeviation="6" result="coloredBlur" />
-                        <feMerge>
-                            <feMergeNode in="coloredBlur" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-                </defs>
+        <>
+            <g {...getProps("back_head_neck", "Testa / Collo (retro)")}>
+                <title>Testa / Collo (retro)</title>
+                <ellipse cx="707" cy="331" rx="110" ry="135" />
+                <path d="M660 440 L754 440 L760 550 L654 550 Z" />
+            </g>
 
-                <style>{`
-                    .zone {
-                        fill: #22d3ee; 
-                        fill-opacity: 0; 
-                        cursor: pointer; 
-                        transition: all 0.2s ease;
-                        pointer-events: all;
-                        stroke: transparent;
-                        stroke-width: 2px;
-                    }
-                    .zone:hover {
-                        fill-opacity: 0.2;
-                        filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
-                    }
-                    .zone.is-selected {
-                        fill-opacity: 0.4;
-                        stroke: #67e8f9;
-                        filter: url(#glow-back);
-                    }
-                `}</style>
+            <g {...getProps("upper_back", "Schiena alta")}>
+                <title>Schiena alta</title>
+                <path d="M570 480 L707 480 L707 700 L600 730 L550 550 Z" />
+                <path d="M844 480 L707 480 L707 700 L814 730 L864 550 Z" />
+                <path d="M530 520 L600 550 L590 680 L520 650 Z" />
+                <path d="M884 520 L814 550 L824 680 L894 650 Z" />
+            </g>
 
-                {/* BASE IMAGE */}
-                <image
-                    href="/assets/body-back.png"
-                    x="0" y="0"
-                    width="1024" height="1365"
-                    preserveAspectRatio="xMidYMid meet"
-                    opacity="1"
-                />
+            <g {...getProps("lower_back", "Schiena bassa")}>
+                <title>Schiena bassa</title>
+                <path d="M600 720 L707 690 L707 920 L650 940 Q620 900 600 720 Z" />
+                <path d="M814 720 L707 690 L707 920 L764 940 Q794 900 814 720 Z" />
+            </g>
 
-                <g id="zones-back" onClick={handleZoneClick}>
-                    {/* Head / Neck */}
-                    <ellipse className={cn("zone", isSelected("back_head") && "is-selected")} style={getZoneTransform("back_head")} data-zone="back_head" cx="512" cy="165" rx="80" ry="95"><title>Testa (retro)</title></ellipse>
-                    <rect className={cn("zone", isSelected("back_neck") && "is-selected")} style={getZoneTransform("back_neck")} data-zone="back_neck" x="480" y="255" width="64" height="75" rx="26"><title>Collo (retro)</title></rect>
+            <g {...getProps("glute_l", "Gluteo sinistro")}>
+                <title>Gluteo sinistro</title>
+                <path d="M580 930 L707 890 L707 1050 L600 1080 Q560 1000 580 930 Z" />
+            </g>
+            <g {...getProps("glute_r", "Gluteo destro")}>
+                <title>Gluteo destro</title>
+                <path d="M834 930 L707 890 L707 1050 L814 1080 Q854 1000 834 930 Z" />
+            </g>
 
-                    {/* Upper back L/R */}
-                    <path className={cn("zone", isSelected("upper_back_l") && "is-selected")} style={getZoneTransform("upper_back_l")} data-zone="upper_back_l" d="M420 335 L510 335 L510 460 L440 480 Q400 450 420 335 Z"><title>Schiena alta sinistra</title></path>
-                    <path className={cn("zone", isSelected("upper_back_r") && "is-selected")} style={getZoneTransform("upper_back_r")} data-zone="upper_back_r" d="M514 335 L604 335 Q624 450 584 480 L514 460 Z"><title>Schiena alta destra</title></path>
+            <g {...getProps("back_upperarm_l", "Braccio sx (retro)")}>
+                <title>Braccio sx (retro)</title>
+                <path d="M430 450 Q500 420 560 450 L580 580 Q500 600 410 580 Z" />
+                <path d="M410 570 L580 570 L570 790 L420 790 Z" />
+            </g>
+            <g {...getProps("back_elbow_l", "Gomito sx (retro)")}>
+                <title>Gomito sx (retro)</title>
+                <path d="M420 780 L570 780 L565 850 L425 850 Z" />
+            </g>
+            <g {...getProps("back_forearm_l", "Avambraccio sx (retro)")}>
+                <title>Avambraccio sx (retro)</title>
+                <path d="M425 840 L565 840 L555 1130 L415 1130 Z" />
+                <path d="M415 1120 L555 1120 L550 1170 L410 1170 Z" />
+            </g>
+            <g {...getProps("back_hand_l", "Mano sx (retro)")}>
+                <title>Mano sx (retro)</title>
+                <path d="M400 1170 L550 1170 L540 1450 L410 1450 Z" />
+            </g>
 
-                    {/* Scapula L/R */}
-                    <path className={cn("zone", isSelected("scapula_l") && "is-selected")} style={getZoneTransform("scapula_l")} data-zone="scapula_l" d="M390 360 L440 380 L430 450 L385 430 Z"><title>Scapola sinistra</title></path>
-                    <path className={cn("zone", isSelected("scapula_r") && "is-selected")} style={getZoneTransform("scapula_r")} data-zone="scapula_r" d="M634 360 L584 380 L594 450 L639 430 Z"><title>Scapola destra</title></path>
+            <g {...getProps("back_upperarm_r", "Braccio dx (retro)")}>
+                <title>Braccio dx (retro)</title>
+                <path d="M984 450 Q914 420 854 450 L834 580 Q914 600 1004 580 Z" />
+                <path d="M1004 570 L834 570 L844 790 L994 790 Z" />
+            </g>
+            <g {...getProps("back_elbow_r", "Gomito dx (retro)")}>
+                <title>Gomito dx (retro)</title>
+                <path d="M994 780 L844 780 L849 850 L989 850 Z" />
+            </g>
+            <g {...getProps("back_forearm_r", "Avambraccio dx (retro)")}>
+                <title>Avambraccio dx (retro)</title>
+                <path d="M989 840 L849 840 L859 1130 L999 1130 Z" />
+                <path d="M999 1120 L859 1120 L864 1170 L1004 1170 Z" />
+            </g>
+            <g {...getProps("back_hand_r", "Mano dx (retro)")}>
+                <title>Mano dx (retro)</title>
+                <path d="M1014 1170 L864 1170 L874 1450 L1004 1450 Z" />
+            </g>
 
-                    {/* Lower back L/R */}
-                    <path className={cn("zone", isSelected("lower_back_l") && "is-selected")} style={getZoneTransform("lower_back_l")} data-zone="lower_back_l" d="M440 480 L510 460 L510 620 L452 640 Q420 610 440 480 Z"><title>Schiena bassa sinistra</title></path>
-                    <path className={cn("zone", isSelected("lower_back_r") && "is-selected")} style={getZoneTransform("lower_back_r")} data-zone="lower_back_r" d="M514 460 L584 480 Q604 610 572 640 L514 620 Z"><title>Schiena bassa destra</title></path>
+            <g {...getProps("back_thigh_l", "Coscia sx (retro)")}>
+                <title>Coscia sx (retro)</title>
+                <path d="M560 1060 L650 1060 L640 1300 L560 1280 Z" />
+            </g>
+            <g {...getProps("back_knee_l", "Ginocchio sx (retro)")}>
+                <title>Ginocchio sx (retro)</title>
+                <path d="M560 1270 L640 1270 L635 1350 L565 1350 Z" />
+            </g>
+            <g {...getProps("back_calf_l", "Polpaccio sx")}>
+                <title>Polpaccio sx</title>
+                <path d="M550 1350 L640 1350 L620 1560 L570 1560 Z" />
+            </g>
+            <g {...getProps("back_foot_l", "Piede sx (retro)")}>
+                <title>Piede sx (retro)</title>
+                <path d="M580 1550 L630 1550 L625 1600 L585 1600 Z" />
+                <path d="M560 1600 L650 1600 L640 1650 L570 1650 Z" />
+            </g>
 
-                    {/* Glutes L/R */}
-                    <path className={cn("zone", isSelected("glute_l") && "is-selected")} style={getZoneTransform("glute_l")} data-zone="glute_l" d="M420 700 L510 660 L510 820 L442 840 Q400 800 420 700 Z"><title>Gluteo sinistro</title></path>
-                    <path className={cn("zone", isSelected("glute_r") && "is-selected")} style={getZoneTransform("glute_r")} data-zone="glute_r" d="M514 660 L604 700 Q624 800 582 840 L514 820 Z"><title>Gluteo destro</title></path>
-
-                    {/* Arms (macro back) */}
-                    <rect className={cn("zone", isSelected("back_upperarm_l") && "is-selected")} style={getZoneTransform("back_upperarm_l")} data-zone="back_upperarm_l" x="300" y="390" width="110" height="210" rx="44" />
-                    <rect className={cn("zone", isSelected("back_upperarm_r") && "is-selected")} style={getZoneTransform("back_upperarm_r")} data-zone="back_upperarm_r" x="614" y="390" width="110" height="210" rx="44" />
-                    <rect className={cn("zone", isSelected("back_forearm_l") && "is-selected")} style={getZoneTransform("back_forearm_l")} data-zone="back_forearm_l" x="300" y="670" width="110" height="310" rx="44" />
-                    <rect className={cn("zone", isSelected("back_forearm_r") && "is-selected")} style={getZoneTransform("back_forearm_r")} data-zone="back_forearm_r" x="614" y="670" width="110" height="310" rx="44" />
-                    <rect className={cn("zone", isSelected("back_hand_l") && "is-selected")} style={getZoneTransform("back_hand_l")} data-zone="back_hand_l" x="290" y="1020" width="130" height="200" rx="36" />
-                    <rect className={cn("zone", isSelected("back_hand_r") && "is-selected")} style={getZoneTransform("back_hand_r")} data-zone="back_hand_r" x="604" y="1020" width="130" height="200" rx="36" />
-
-                    {/* Thigh back L/R */}
-                    <rect className={cn("zone", isSelected("thigh_back_l") && "is-selected")} style={getZoneTransform("thigh_back_l")} data-zone="thigh_back_l" x="410" y="860" width="140" height="220" rx="50" />
-                    <rect className={cn("zone", isSelected("thigh_back_r") && "is-selected")} style={getZoneTransform("thigh_back_r")} data-zone="thigh_back_r" x="474" y="860" width="140" height="220" rx="50" />
-
-                    {/* Knees */}
-                    <rect className={cn("zone", isSelected("knee_back_l") && "is-selected")} style={getZoneTransform("knee_back_l")} data-zone="knee_back_l" x="430" y="1080" width="110" height="80" rx="26" />
-                    <rect className={cn("zone", isSelected("knee_back_r") && "is-selected")} style={getZoneTransform("knee_back_r")} data-zone="knee_back_r" x="484" y="1080" width="110" height="80" rx="26" />
-
-                    {/* Calves */}
-                    <rect className={cn("zone", isSelected("calf_back_l") && "is-selected")} style={getZoneTransform("calf_back_l")} data-zone="calf_back_l" x="420" y="1160" width="120" height="170" rx="55" />
-                    <rect className={cn("zone", isSelected("calf_back_r") && "is-selected")} style={getZoneTransform("calf_back_r")} data-zone="calf_back_r" x="484" y="1160" width="120" height="170" rx="55" />
-
-                    {/* Ankles + feet */}
-                    <rect className={cn("zone", isSelected("back_ankle_l") && "is-selected")} style={getZoneTransform("back_ankle_l")} data-zone="back_ankle_l" x="438" y="1330" width="90" height="35" rx="14" />
-                    <rect className={cn("zone", isSelected("back_ankle_r") && "is-selected")} style={getZoneTransform("back_ankle_r")} data-zone="back_ankle_r" x="496" y="1330" width="90" height="35" rx="14" />
-                    <path className={cn("zone", isSelected("back_foot_l") && "is-selected")} style={getZoneTransform("back_foot_l")} data-zone="back_foot_l" d="M410 1365 L520 1365 L540 1388 Q490 1404 420 1390 Z" />
-                    <path className={cn("zone", isSelected("back_foot_r") && "is-selected")} style={getZoneTransform("back_foot_r")} data-zone="back_foot_r" d="M504 1365 L614 1365 L604 1390 Q534 1404 484 1388 Z" />
-                </g>
-            </svg>
-        </div>
+            <g {...getProps("back_thigh_r", "Coscia dx (retro)")}>
+                <title>Coscia dx (retro)</title>
+                <path d="M854 1060 L764 1060 L774 1300 L854 1280 Z" />
+            </g>
+            <g {...getProps("back_knee_r", "Ginocchio dx (retro)")}>
+                <title>Ginocchio dx (retro)</title>
+                <path d="M854 1270 L774 1270 L779 1350 L849 1350 Z" />
+            </g>
+            <g {...getProps("back_calf_r", "Polpaccio dx")}>
+                <title>Polpaccio dx</title>
+                <path d="M864 1350 L774 1350 L794 1560 L844 1560 Z" />
+            </g>
+            <g {...getProps("back_foot_r", "Piede dx (retro)")}>
+                <title>Piede dx (retro)</title>
+                <path d="M834 1550 L784 1550 L789 1600 L829 1600 Z" />
+                <path d="M854 1600 L764 1600 L774 1650 L844 1650 Z" />
+            </g>
+        </>
     )
 }
