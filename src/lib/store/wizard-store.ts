@@ -25,6 +25,12 @@ export interface ActionItem {
     date: Date | null
 }
 
+export interface AnalysisExtras {
+    standardInvolved: string
+    riskBefore: string
+    riskAfter: string
+}
+
 export interface WizardState {
     // Step 1: Context
     category: IncidentCategory | ''
@@ -51,6 +57,8 @@ export interface WizardState {
     fiveWhys: WhyItem[]
     rootCauses: { category: string; subcategory: string; type: 'Unsafe Act' | 'Unsafe Condition' } | null
     actionItems: ActionItem[]
+    eventSummary: string
+    analysisExtras: AnalysisExtras
 
     // Meta
     currentStep: number
@@ -85,6 +93,8 @@ export const useWizardStore = create<WizardState>()(
             fiveWhys: Array.from({ length: 5 }).map((_, i) => ({ id: `why-${i}`, cause: '', category: '' })),
             rootCauses: null,
             actionItems: [],
+            eventSummary: '',
+            analysisExtras: { standardInvolved: 'Nessuno / Non applicabile', riskBefore: '', riskAfter: '' },
 
             currentStep: 1,
             totalSteps: 5,
@@ -99,12 +109,14 @@ export const useWizardStore = create<WizardState>()(
                 injuredPersonName: '', jobTitle: '', supervisor: '', gender: '', bodyParts: [],
                 fiveWhys: Array.from({ length: 5 }).map((_, i) => ({ id: `why-${i}`, cause: '', category: '' })),
                 rootCauses: null, actionItems: [],
+                eventSummary: '',
+                analysisExtras: { standardInvolved: 'Nessuno / Non applicabile', riskBefore: '', riskAfter: '' },
                 currentStep: 1
             })
         }),
         {
             name: 'incident-wizard-storage',
-            version: 1, // Force state reset to handle schema changes
+            version: 2, // Bumped to 2 to force state reset and include new fields
         }
     )
 )
