@@ -20,9 +20,11 @@ export interface WhyItem {
 }
 
 export interface ActionItem {
+    id: string
+    type: 'Containment' | 'Corrective' | 'Preventive'
     description: string
     owner: string
-    date: Date | null
+    dueDate: Date | null
 }
 
 export interface AnalysisExtras {
@@ -116,7 +118,7 @@ export const useWizardStore = create<WizardState>()(
         }),
         {
             name: 'incident-wizard-storage',
-            version: 2, // Bumped to 2 to force state reset and include new fields
+            version: 3, // Bumped to 3 to handle ActionItem schema change
         }
     )
 )
