@@ -12,6 +12,19 @@ export interface BodyPart {
     view: BodyView
 }
 
+// Exported interfaces for Step 4
+export interface WhyItem {
+    id: string
+    cause: string
+    category: string
+}
+
+export interface ActionItem {
+    description: string
+    owner: string
+    date: Date | null
+}
+
 export interface WizardState {
     // Step 1: Context
     category: IncidentCategory | ''
@@ -32,13 +45,12 @@ export interface WizardState {
     gender: 'Male' | 'Female' | 'Other' | ''
     bodyParts: BodyPart[]
 
-    // Step 3: Photos (managed via separate upload, but we store references here?)
-    // For now, let's keep it simple.
+    // Step 3: Photos (managed via separate upload)
 
     // Step 4: Analysis
-    fiveWhys: string[] // Array of strings for now, or objects
+    fiveWhys: WhyItem[]
     rootCauses: { category: string; subcategory: string; type: 'Unsafe Act' | 'Unsafe Condition' } | null
-    actionItems: { description: string; owner: string; date: Date | null }[]
+    actionItems: ActionItem[]
 
     // Meta
     currentStep: number
@@ -69,7 +81,8 @@ export const useWizardStore = create<WizardState>()(
             supervisor: '',
             gender: '',
             bodyParts: [],
-            fiveWhys: ['', '', '', '', ''],
+            // Initialize with 5 empty WhyItems with IDs
+            fiveWhys: Array.from({ length: 5 }).map((_, i) => ({ id: `why-${i}`, cause: '', category: '' })),
             rootCauses: null,
             actionItems: [],
 
@@ -84,12 +97,14 @@ export const useWizardStore = create<WizardState>()(
                 category: '', injurySubtype: '', site: '', area: '', incidentDate: null,
                 description: '', building: '', floor: '', room: '',
                 injuredPersonName: '', jobTitle: '', supervisor: '', gender: '', bodyParts: [],
-                fiveWhys: ['', '', '', '', ''], rootCauses: null, actionItems: [],
+                fiveWhys: Array.from({ length: 5 }).map((_, i) => ({ id: `why-${i}`, cause: '', category: '' })),
+                rootCauses: null, actionItems: [],
                 currentStep: 1
             })
         }),
         {
             name: 'incident-wizard-storage',
+            version: 1, // Force state reset to handle schema changes
         }
     )
 )
