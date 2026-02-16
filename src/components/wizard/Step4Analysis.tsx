@@ -118,7 +118,6 @@ export default function Step4Analysis() {
                 owner: "",
                 dueDate: due,
                 type: 'Containment', // Immediate
-                completed: false
             }])
         }
     }, [])
@@ -161,8 +160,7 @@ export default function Step4Analysis() {
             description: "",
             owner: "",
             dueDate: due,
-            type: 'Corrective',
-            completed: false
+            type: 'Corrective'
         }])
     }
 
