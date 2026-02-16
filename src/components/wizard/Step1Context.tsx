@@ -60,8 +60,8 @@ export default function Step1Context() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            category: category as any || undefined,
-            injurySubtype: injurySubtype as any || undefined,
+            category: category || undefined,
+            injurySubtype: injurySubtype || undefined,
             site: site || "",
             siteOther: "",
             area: area || "",
@@ -208,7 +208,7 @@ export default function Step1Context() {
                             name="incidentDate"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Data e Ora dell'evento</FormLabel>
+                                    <FormLabel>Data e Ora dell&apos;evento</FormLabel>
                                     <FormControl>
                                         <Input type="datetime-local" {...field} />
                                     </FormControl>
@@ -240,7 +240,7 @@ function DefinitionsDialog() {
                 <DialogHeader>
                     <DialogTitle>Definizioni Categorie</DialogTitle>
                     <DialogDescription>
-                        Guida alla classificazione dell'evento.
+                        Guida alla classificazione dell&apos;evento.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 text-sm">
