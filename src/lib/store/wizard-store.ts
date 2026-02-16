@@ -67,7 +67,7 @@ export interface WizardState {
     totalSteps: number
 
     // Actions
-    setField: (field: keyof WizardState, value: any) => void
+    setField: (field: keyof WizardState, value: unknown) => void
     nextStep: () => void
     prevStep: () => void
     reset: () => void

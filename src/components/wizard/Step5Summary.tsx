@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from "lucide-react"
+import { CheckCircle2, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
@@ -81,9 +81,10 @@ export default function Step5Summary() {
                 router.push('/reports')
             }, 3000)
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error submitting:", error)
-            toast.error("Errore durante l'invio: " + (error.message || "Unknown error"))
+            const message = error instanceof Error ? error.message : "Unknown error"
+            toast.error("Errore durante l'invio: " + message)
         } finally {
             setIsSubmitting(false)
         }
@@ -169,7 +170,7 @@ export default function Step5Summary() {
                     {/* Actions Recap */}
                     <div className="space-y-4">
                         <h3 className="font-bold text-slate-700 flex items-center gap-2">
-                            <span className="w-1.5 h-4 bg-orange-500 rounded-full" /> Piano d'Azione
+                            <span className="w-1.5 h-4 bg-orange-500 rounded-full" /> Piano d&apos;Azione
                         </h3>
                         {store.actionItems.length === 0 ? (
                             <p className="text-sm text-slate-400 italic">Nessuna azione definita.</p>

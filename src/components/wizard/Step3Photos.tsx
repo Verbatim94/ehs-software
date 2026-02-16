@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { X, Upload, Image as ImageIcon } from "lucide-react"
+import { X, Upload } from "lucide-react"
 
 export default function Step3Photos() {
     const { nextStep, prevStep } = useWizardStore()
@@ -47,7 +47,7 @@ export default function Step3Photos() {
                 <div className="border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center bg-muted/30">
                     <Upload className="h-10 w-10 text-muted-foreground mb-4" />
                     <p className="text-sm text-center text-muted-foreground mb-4">
-                        Carica foto dell'evento (max 5).
+                        Carica foto dell&apos;evento (max 5).
                     </p>
                     <Input
                         type="file"

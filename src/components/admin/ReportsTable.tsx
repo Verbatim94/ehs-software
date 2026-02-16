@@ -4,7 +4,6 @@
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -15,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Eye } from "lucide-react"
 import Link from "next/link"
 
-interface Incident {
+export interface Incident {
     id: string
     report_number: number
     created_at: string

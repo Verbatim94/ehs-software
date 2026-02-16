@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useWizardStore } from "@/lib/store/wizard-store"
@@ -48,7 +48,7 @@ export default function Step2Description() {
     const schema = isInjury ? injurySchema : baseSchema
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(schema) as any,
+        resolver: zodResolver(schema) as Resolver<FormValues>,
         defaultValues: {
             building: building || "",
             buildingOther: "",
@@ -59,7 +59,7 @@ export default function Step2Description() {
             injuredPersonName: injuredPersonName || "",
             jobTitle: jobTitle || "",
             supervisor: supervisor || "",
-            gender: gender as any || undefined,
+            gender: gender || undefined,
         }
     })
 
@@ -204,7 +204,7 @@ export default function Step2Description() {
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Descrizione dell'evento</FormLabel>
+                                    <FormLabel>Descrizione dell&apos;evento</FormLabel>
                                     <FormControl>
                                         <Textarea
                                             placeholder="Descrivi dettagliatamente l'accaduto..."

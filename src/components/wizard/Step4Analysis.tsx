@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 import { useWizardStore, WhyItem, ActionItem } from "@/lib/store/wizard-store"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,12 +9,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import {
-    Plus, Trash2, HelpCircle, AlertTriangle, CheckCircle2,
-    ArrowRight, Info, Lightbulb, ChevronDown, ChevronUp, AlertOctagon
+    Plus, Trash2, CheckCircle2,
+    ArrowRight, Info, Lightbulb, AlertOctagon
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AnimatePresence, motion } from "framer-motion"
@@ -147,7 +146,7 @@ export default function Step4Analysis() {
     }
 
     // --- HANDLERS: ACTIONS ---
-    const updateAction = (index: number, field: keyof ActionItem, value: any) => {
+    const updateAction = (index: number, field: keyof ActionItem, value: ActionItem[keyof ActionItem]) => {
         const newActions = [...actionItems]
         newActions[index] = { ...newActions[index], [field]: value }
         setField("actionItems", newActions)
@@ -256,7 +255,7 @@ export default function Step4Analysis() {
                                 <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
                                 <div>
                                     <span className="font-semibold text-blue-600 block mb-0.5">Come scrivere bene:</span>
-                                    Descrivi solo il fatto, senza colpe. Evita 'disattenzione'. Meglio: azione + condizione + conseguenza.
+                                    Descrivi solo il fatto, senza colpe. Evita &apos;disattenzione&apos;. Meglio: azione + condizione + conseguenza.
                                 </div>
                             </div>
                         </div>
