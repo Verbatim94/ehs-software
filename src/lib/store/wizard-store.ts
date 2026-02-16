@@ -33,7 +33,7 @@ export interface AnalysisExtras {
     riskAfter: string
 }
 
-export interface WizardState {
+type WizardFields = {
     // Step 1: Context
     category: IncidentCategory | ''
     injurySubtype: 'On-site' | 'Commuting' | ''
@@ -65,9 +65,11 @@ export interface WizardState {
     // Meta
     currentStep: number
     totalSteps: number
+}
 
+export interface WizardState extends WizardFields {
     // Actions
-    setField: (field: keyof WizardState, value: any) => void
+    setField: <K extends keyof WizardFields>(field: K, value: WizardFields[K]) => void
     nextStep: () => void
     prevStep: () => void
     reset: () => void

@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from "lucide-react"
+import { CheckCircle2, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
@@ -63,13 +63,7 @@ export default function Step5Summary() {
                 .insert(payload)
 
             if (error) {
-                console.error("Supabase Error:", error)
-                // For MVP local demo without real DB schema updates, we might fail here.
-                // Let's simulate success if it's just a schema mismatch for now?
-                // throw error 
-                // ALLOW MOCK SUCCESS FOR DEMO IF DB FAILS (User requested "Deliverables", assuming DB might be detached)
-                toast.error("Errore DB (Simulato successo per demo): " + error.message)
-                // Proceed to success anyway for visual verification
+                throw error
             }
 
             setIsSuccess(true)
@@ -81,9 +75,10 @@ export default function Step5Summary() {
                 router.push('/reports')
             }, 3000)
 
-        } catch (error: any) {
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Errore sconosciuto"
             console.error("Error submitting:", error)
-            toast.error("Errore durante l'invio: " + (error.message || "Unknown error"))
+            toast.error("Errore durante l'invio: " + message)
         } finally {
             setIsSubmitting(false)
         }
@@ -169,7 +164,7 @@ export default function Step5Summary() {
                     {/* Actions Recap */}
                     <div className="space-y-4">
                         <h3 className="font-bold text-slate-700 flex items-center gap-2">
-                            <span className="w-1.5 h-4 bg-orange-500 rounded-full" /> Piano d'Azione
+                            <span className="w-1.5 h-4 bg-orange-500 rounded-full" /> Piano d&apos;Azione
                         </h3>
                         {store.actionItems.length === 0 ? (
                             <p className="text-sm text-slate-400 italic">Nessuna azione definita.</p>

@@ -75,7 +75,7 @@ export default function Step1Context() {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         setField("category", values.category)
-        setField("injurySubtype", values.category === "Infortunio" ? values.injurySubtype : undefined)
+        setField("injurySubtype", values.category === "Infortunio" ? (values.injurySubtype ?? "") : "")
 
         // Handle "Altro" site logic
         const finalSite = values.site === "Altro" ? values.siteOther! : values.site

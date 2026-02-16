@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { ReportsTable } from "@/components/admin/ReportsTable"
 import { Button } from "@/components/ui/button"
@@ -8,25 +8,30 @@ import { Plus, FileText, Filter } from "lucide-react"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+import { Incident } from "@/types/incidents"
 
 export default function ReportsPage() {
-    const [incidents, setIncidents] = useState<any[]>([])
+    const [incidents, setIncidents] = useState<Incident[]>([])
     const [loading, setLoading] = useState(true)
     const supabase = createClient()
 
-    useEffect(() => {
-        const fetchReports = async () => {
-            const { data, error } = await supabase
-                .from('incidents')
-                .select('*')
-                .order('created_at', { ascending: false })
+    const fetchReports = useCallback(async () => {
+        const { data, error } = await supabase
+            .from('incidents')
+            .select('*')
+            .order('created_at', { ascending: false })
 
-            if (!error) setIncidents(data || [])
-            setLoading(false)
+        if (!error) {
+            setIncidents((data as Incident[]) || [])
         }
-        fetchReports()
-    }, [])
+        setLoading(false)
+    }, [supabase])
+
+    useEffect(() => {
+        queueMicrotask(() => {
+            void fetchReports()
+        })
+    }, [fetchReports])
 
     return (
         <div className="relative min-h-screen bg-slate-50 pb-20">

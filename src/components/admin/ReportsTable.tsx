@@ -4,7 +4,6 @@
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -14,16 +13,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Eye } from "lucide-react"
 import Link from "next/link"
-
-interface Incident {
-    id: string
-    report_number: number
-    created_at: string
-    category: string
-    site: string
-    status: string
-    description: string
-}
+import { Incident } from "@/types/incidents"
 
 interface ReportsTableProps {
     incidents: Incident[]

@@ -1,23 +1,20 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { ReportsTable } from "@/components/admin/ReportsTable"
 import { Button } from "@/components/ui/button"
 import { Loader2, FileText, AlertCircle, CheckCircle2, Calendar } from "lucide-react"
 import { AdminLayout } from "@/components/admin/AdminLayout"
 import { AdminStats } from "@/components/admin/AdminStats"
+import { Incident } from "@/types/incidents"
 
 export default function AdminReportsPage() {
-    const [incidents, setIncidents] = useState<any[]>([])
+    const [incidents, setIncidents] = useState<Incident[]>([])
     const [loading, setLoading] = useState(true)
     const supabase = createClient()
 
-    useEffect(() => {
-        fetchReports()
-    }, [])
-
-    const fetchReports = async () => {
+    const fetchReports = useCallback(async () => {
         setLoading(true)
         const { data, error } = await supabase
             .from('incidents')
@@ -27,10 +24,16 @@ export default function AdminReportsPage() {
         if (error) {
             console.error("Error fetching reports:", error)
         } else {
-            setIncidents(data || [])
+            setIncidents((data as Incident[]) || [])
         }
         setLoading(false)
-    }
+    }, [supabase])
+
+    useEffect(() => {
+        queueMicrotask(() => {
+            void fetchReports()
+        })
+    }, [fetchReports])
 
     // Calculations
     const total = incidents.length
