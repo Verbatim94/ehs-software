@@ -76,7 +76,7 @@ export default function HomePage() {
                                 <h2 className="text-lg md:text-xl font-bold text-slate-800">{userName}</h2>
                                 <p className="text-xs md:text-sm text-slate-500 mb-3 md:mb-4">EHS Manager</p>
                                 <div className="flex flex-wrap gap-2 md:gap-3">
-                                    <Link href="/admin/profile">
+                                    <Link href="/profile">
                                         <Button size="sm" variant="outline" className="text-xs">Profilo</Button>
                                     </Link>
                                     <Link href="/settings">
