@@ -1,14 +1,41 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Plus, FileText, Map, Shield, User, Search, Settings, Leaf } from "lucide-react"
+import { Plus, FileText, Map, Shield, User, Search, Settings, Leaf, Loader2 } from "lucide-react"
 import { HomeStats } from "@/components/home/HomeStats"
 import { HomeActionCard } from "@/components/home/HomeActionCard"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
+import { createClient } from "@/lib/supabase/client"
 
 export default function HomePage() {
+    const [loading, setLoading] = useState(true)
+    const [userName, setUserName] = useState("Utente")
+    const supabase = createClient()
+
+    useEffect(() => {
+        async function getProfile() {
+            setLoading(true)
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user?.user_metadata?.full_name) {
+                setUserName(user.user_metadata.full_name)
+            } else if (user?.email) {
+                setUserName(user.email.split('@')[0])
+            }
+            setLoading(false)
+        }
+        getProfile()
+    }, [supabase])
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            </div>
+        )
+    }
+
     return (
         <div className="relative min-h-screen bg-slate-50 pb-20">
             {/* 1. BLUE HEADER BACKGROUND */}
@@ -21,7 +48,7 @@ export default function HomePage() {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-white mb-8 gap-4">
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">EHS Dashboard</h1>
-                        <p className="text-blue-100 text-sm opacity-90">Bentornato, Matteo</p>
+                        <p className="text-blue-100 text-sm opacity-90">Bentornato, {userName.split(' ')[0]}</p>
                     </div>
 
                     {/* Search Bar (Visual) */}
@@ -46,10 +73,10 @@ export default function HomePage() {
                                 <User className="h-8 w-8 md:h-10 md:w-10 text-white" />
                             </div>
                             <div className="flex-1 w-full">
-                                <h2 className="text-lg md:text-xl font-bold text-slate-800">Matteo Nieddu</h2>
-                                <p className="text-xs md:text-sm text-slate-500 mb-3 md:mb-4">EHS Manager &bull; Site A</p>
+                                <h2 className="text-lg md:text-xl font-bold text-slate-800">{userName}</h2>
+                                <p className="text-xs md:text-sm text-slate-500 mb-3 md:mb-4">EHS Manager</p>
                                 <div className="flex flex-wrap gap-2 md:gap-3">
-                                    <Link href="/profile">
+                                    <Link href="/admin/profile">
                                         <Button size="sm" variant="outline" className="text-xs">Profilo</Button>
                                     </Link>
                                     <Link href="/settings">
