@@ -19,8 +19,8 @@ export default function TabsLayout({ children }: { children: React.ReactNode }) 
         <div className="flex h-screen w-full flex-col bg-muted/40 md:flex-row">
             {/* Sidebar (Desktop) */}
             <aside className="hidden w-64 flex-col border-r bg-background p-4 md:flex">
-                <div className="mb-8 flex justify-center px-2 py-4">
-                    <img src="/images/logo.png" alt="SafeMind Logo" className="h-20 w-auto" />
+                <div className="mb-6 flex justify-center px-2 py-2">
+                    <img src="/images/logo.png" alt="SafeMind Logo" className="h-40 w-auto" />
                 </div>
                 <nav className="flex-1 space-y-2">
                     {tabs.map((tab) => {
