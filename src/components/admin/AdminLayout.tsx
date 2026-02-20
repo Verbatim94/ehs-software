@@ -41,7 +41,7 @@ export function AdminLayout({ children, stats, title, action, className }: Admin
             {/* Simple Footer */}
             <div className="container mx-auto px-4 md:px-8 pt-8 text-center">
                 <p className="text-xs text-muted-foreground">
-                    &copy; {new Date().getFullYear()} EHS Platform. Secure & Compliant.
+                    &copy; {new Date().getFullYear()} SafeMind. Secure & Compliant.
                 </p>
             </div>
         </div>

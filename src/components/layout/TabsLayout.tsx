@@ -19,8 +19,9 @@ export default function TabsLayout({ children }: { children: React.ReactNode }) 
         <div className="flex h-screen w-full flex-col bg-muted/40 md:flex-row">
             {/* Sidebar (Desktop) */}
             <aside className="hidden w-64 flex-col border-r bg-background p-4 md:flex">
-                <div className="mb-8 flex items-center gap-2 px-2 font-bold text-xl text-primary">
-                    <span>SafetyApp</span>
+                <div className="mb-8 flex items-center gap-3 px-2 font-bold text-xl text-primary">
+                    <img src="/images/logo.png" alt="SafeMind Logo" className="h-8 w-auto" />
+                    <span className="tracking-tight">SafeMind</span>
                 </div>
                 <nav className="flex-1 space-y-2">
                     {tabs.map((tab) => {
@@ -31,8 +32,8 @@ export default function TabsLayout({ children }: { children: React.ReactNode }) 
                                 key={tab.href}
                                 href={tab.href}
                                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-colors ${isActive
-                                        ? "bg-primary text-primary-foreground"
-                                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                                     }`}
                             >
                                 <Icon className="h-5 w-5" />

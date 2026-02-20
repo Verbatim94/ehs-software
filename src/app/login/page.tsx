@@ -59,9 +59,12 @@ export default function LoginPage() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-muted/20 p-4">
-            <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle>Accedi a EHS Reports</CardTitle>
+            <Card className="w-full max-w-md border-none shadow-2xl bg-white/95 backdrop-blur">
+                <CardHeader className="text-center pb-2">
+                    <div className="flex justify-center mb-4">
+                        <img src="/images/logo.png" alt="SafeMind Logo" className="h-16 w-auto" />
+                    </div>
+                    <CardTitle className="text-2xl font-bold text-slate-800">Accedi a SafeMind</CardTitle>
                     <CardDescription>Inserisci le tue credenziali per continuare</CardDescription>
                 </CardHeader>
                 <CardContent>

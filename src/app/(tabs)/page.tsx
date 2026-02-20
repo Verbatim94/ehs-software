@@ -47,7 +47,7 @@ export default function HomePage() {
                 {/* 2. TOP NAVBAR (Welcome & Search) */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-white mb-8 gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight">EHS Dashboard</h1>
+                        <h1 className="text-2xl font-bold tracking-tight">SafeMind Dashboard</h1>
                         <p className="text-blue-100 text-sm opacity-90">Bentornato, {userName.split(' ')[0]}</p>
                     </div>
 
