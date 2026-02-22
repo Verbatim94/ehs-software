@@ -5,6 +5,7 @@ import { useWizardStore } from "@/lib/store/wizard-store"
 import { cn } from "@/lib/utils"
 import { User, Activity, Move, Bug, X, Settings2, Maximize2, MousePointer2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { Button } from "@/components/ui/button"
 import BodyFront from "./body-chart/BodyFront"
 import BodyBack from "./body-chart/BodyBack"
 
@@ -198,17 +199,48 @@ export default function BodyChart() {
 
                 <div className="flex items-center gap-2">
                     <div className="bg-slate-100 p-1 rounded-lg flex mr-4">
-                        <button onClick={() => setView('front')} className={cn("px-4 py-1.5 rounded-md text-xs font-medium transition-all", view === 'front' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>Frontale</button>
-                        <button onClick={() => setView('back')} className={cn("px-4 py-1.5 rounded-md text-xs font-medium transition-all", view === 'back' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>Dorsale</button>
+                        <Button
+                            type="button"
+                            variant={view === 'front' ? "default" : "ghost"}
+                            size="sm"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setView('front');
+                            }}
+                            className={cn("h-8 px-4 py-1.5 text-xs font-medium transition-all", view === 'front' ? "bg-white text-slate-900 shadow-sm hover:bg-white" : "text-slate-500 hover:text-slate-700")}
+                        >
+                            Frontale
+                        </Button>
+                        <Button
+                            type="button"
+                            variant={view === 'back' ? "default" : "ghost"}
+                            size="sm"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setView('back');
+                            }}
+                            className={cn("h-8 px-4 py-1.5 text-xs font-medium transition-all", view === 'back' ? "bg-white text-slate-900 shadow-sm hover:bg-white" : "text-slate-500 hover:text-slate-700")}
+                        >
+                            Dorsale
+                        </Button>
                     </div>
 
-                    <button
-                        onClick={() => setCalibrationMode(!calibrationMode)}
-                        className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all shadow-sm", calibrationMode ? "bg-orange-50 border-orange-200 text-orange-600 ring-2 ring-orange-100" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50")}
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setCalibrationMode(!calibrationMode);
+                        }}
+                        className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all shadow-sm h-8", calibrationMode ? "bg-orange-50 border-orange-200 text-orange-600 ring-2 ring-orange-100 hover:bg-orange-100" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50")}
                     >
                         <Settings2 className="w-3.5 h-3.5" />
                         {calibrationMode ? "CALIBRAZIONE" : "Calibra"}
-                    </button>
+                    </Button>
                 </div>
             </div>
 
@@ -290,7 +322,15 @@ export default function BodyChart() {
                                                 className="flex items-center gap-2 bg-blue-50 pl-3 pr-2 py-1.5 rounded-full border border-blue-100 shadow-sm whitespace-nowrap"
                                             >
                                                 <span className="text-[10px] font-bold text-blue-600 uppercase tracking-tight">{p.label}</span>
-                                                <button onClick={() => handleZoneToggle(p.id, "")} className="w-4 h-4 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 flex items-center justify-center transition-colors">
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        handleZoneToggle(p.id, "");
+                                                    }}
+                                                    className="w-4 h-4 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 flex items-center justify-center transition-colors"
+                                                >
                                                     <X className="w-2.5 h-2.5" />
                                                 </button>
                                             </motion.div>
@@ -325,7 +365,15 @@ export default function BodyChart() {
                                     <div className="bg-white border-2 border-orange-100 rounded-xl p-4 shadow-sm">
                                         <div className="flex items-center justify-between mb-4 border-b border-slate-50 pb-2">
                                             <span className="text-xs font-bold text-slate-700 uppercase">{activeZone}</span>
-                                            <button onClick={() => setActiveZone(null)} className="text-slate-400 hover:text-red-500">
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    setActiveZone(null);
+                                                }}
+                                                className="text-slate-400 hover:text-red-500"
+                                            >
                                                 <X className="w-4 h-4" />
                                             </button>
                                         </div>
@@ -374,9 +422,33 @@ export default function BodyChart() {
                                             </div>
 
                                             <div className="pt-2 grid grid-cols-3 gap-2">
-                                                <button onClick={() => updateTransform('sx', 1)} className="px-2 py-1.5 text-[9px] font-medium bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 text-slate-600">Reset W</button>
-                                                <button onClick={() => updateTransform('sy', 1)} className="px-2 py-1.5 text-[9px] font-medium bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 text-slate-600">Reset H</button>
-                                                <button onClick={() => updateTransform('r', 0)} className="px-2 py-1.5 text-[9px] font-medium bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 text-slate-600">Reset R</button>
+                                                <Button
+                                                    type="button"
+                                                    variant="secondary"
+                                                    size="xs"
+                                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateTransform('sx', 1); }}
+                                                    className="px-2 py-1.5 text-[9px] font-medium bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 text-slate-600"
+                                                >
+                                                    Reset W
+                                                </Button>
+                                                <Button
+                                                    type="button"
+                                                    variant="secondary"
+                                                    size="xs"
+                                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateTransform('sy', 1); }}
+                                                    className="px-2 py-1.5 text-[9px] font-medium bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 text-slate-600"
+                                                >
+                                                    Reset H
+                                                </Button>
+                                                <Button
+                                                    type="button"
+                                                    variant="secondary"
+                                                    size="xs"
+                                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateTransform('r', 0); }}
+                                                    className="px-2 py-1.5 text-[9px] font-medium bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 text-slate-600"
+                                                >
+                                                    Reset R
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
@@ -395,12 +467,19 @@ export default function BodyChart() {
                                             className="w-full h-40 bg-slate-900 text-green-400 text-[10px] font-mono p-3 rounded-lg border border-slate-800 resize-none focus:outline-none"
                                             value={JSON.stringify(offsets, null, 2)}
                                         />
-                                        <button
-                                            onClick={() => navigator.clipboard.writeText(JSON.stringify(offsets, null, 2))}
-                                            className="absolute top-2 right-2 bg-white/10 backdrop-blur border border-white/20 text-[10px] px-2 py-1 rounded text-white hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100"
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon-xs"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                navigator.clipboard.writeText(JSON.stringify(offsets, null, 2));
+                                            }}
+                                            className="absolute top-2 right-2 bg-white/10 backdrop-blur border border-white/20 text-[10px] px-2 py-1 rounded text-white hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100 h-auto w-auto"
                                         >
                                             COPIA
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             </div>

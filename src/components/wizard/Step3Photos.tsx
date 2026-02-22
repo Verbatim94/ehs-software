@@ -64,7 +64,12 @@ export default function Step3Photos() {
                         <div key={index} className="relative aspect-square rounded-md overflow-hidden border bg-background">
                             <img src={img.preview} alt="Preview" className="object-cover w-full h-full" />
                             <button
-                                onClick={() => removeImage(index)}
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    removeImage(index);
+                                }}
                                 className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 hover:bg-black/70"
                             >
                                 <X className="h-4 w-4" />

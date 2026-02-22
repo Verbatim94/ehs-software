@@ -293,7 +293,17 @@ export default function Step4Analysis() {
                                             <div className="flex items-center justify-between">
                                                 <Label className="text-slate-600">Perché #{index + 1}</Label>
                                                 {index > 0 && (
-                                                    <Button variant="ghost" size="sm" onClick={() => removeWhy(index)} className="h-6 w-6 p-0 text-slate-300 hover:text-red-500">
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            removeWhy(index);
+                                                        }}
+                                                        className="h-6 w-6 p-0 text-slate-300 hover:text-red-500"
+                                                    >
                                                         <Trash2 className="w-3.5 h-3.5" />
                                                     </Button>
                                                 )}
@@ -388,7 +398,18 @@ export default function Step4Analysis() {
                         {actionItems.map((action, index) => (
                             <div key={action.id} className={cn("p-4 rounded-lg border relative", action.type === 'Containment' ? "bg-orange-50/30 border-orange-100" : "bg-blue-50/30 border-blue-100")}>
                                 <div className="absolute top-3 right-3">
-                                    <Button variant="ghost" size="icon" onClick={() => removeAction(index)} disabled={index === 0 && actionItems.length === 1} className="h-6 w-6 text-slate-300 hover:text-red-500">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            removeAction(index);
+                                        }}
+                                        disabled={index === 0 && actionItems.length === 1}
+                                        className="h-6 w-6 text-slate-300 hover:text-red-500"
+                                    >
                                         <XBtn />
                                     </Button>
                                 </div>
@@ -437,8 +458,13 @@ export default function Step4Analysis() {
                                         <div className="flex flex-wrap gap-1.5">
                                             {QUICK_PICKS.map(pick => (
                                                 <button
+                                                    type="button"
                                                     key={pick}
-                                                    onClick={() => updateAction(index, 'description', pick)}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        updateAction(index, 'description', pick);
+                                                    }}
                                                     className="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors"
                                                 >
                                                     {pick}
